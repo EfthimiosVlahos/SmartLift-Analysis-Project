@@ -7,7 +7,7 @@
 #                                                            #
 ##############################################################
 
-# Updated by Efthimios Vlahos on 12-9-2023
+# Updated by Efthimios Vlahos on 9-12-2023
 
 from sklearn.decomposition import PCA
 from scipy.signal import butter, lfilter, filtfilt
