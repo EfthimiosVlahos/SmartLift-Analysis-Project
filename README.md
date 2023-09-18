@@ -1,42 +1,14 @@
----
+# Smart Lift Project
 
-# Project Overview
+## Table of Contents
+- [Introduction, Goal, and Context](#part-1)
+- [Data Processing](#part-2)
+- [Outlier Handling](#part-3)
+- [Feature Engineering](#part-4)
+- [Predictive Modelling and Repetition Counting](#part-5)
+- [Conclusion](#part-6)
 
-Welcome to this exploration into the realm of activity recognition from wearable data! In this project, we delve deep into the potential applications and challenges of utilizing wearable sensor data to recognize and classify various human activities, especially those related to strength training. 
-
-**Here's a breakdown of what you can expect throughout this journey:**
-
-- **Part 1 — Introduction, Goal, and Context**
-  - Introduction to the world of quantified self.
-  - An overview of the MetaMotion sensor.
-  - Description of the dataset used.
-  
-- **Part 2 — Data Processing**
-  - Techniques to convert raw sensor data.
-  - Reading the data from CSV files.
-  - Strategies for splitting and cleaning the data.
-  
-- **Part 3 — Data Visualization**
-  - Diving into visualizing the data.
-  - Understanding and plotting time series data.
-  
-- **Part 4 — Outlier Handling**
-  - Introduction to outlier detection techniques.
-  - Deep dive into Chauvenet’s criterion and local outlier factor.
-  
-- **Part 5 — Feature Engineering**
-  - Exploration into the realm of frequency domain.
-  - Application of low pass filters.
-  - Data reduction with PCA.
-  - Segmentation and structure with clustering.
-  
-- **Part 6 — Predictive Modelling and Repetition Counting**
-  - Building predictive models using algorithms like Naive Bayes, SVMs, Random Forest, and Neural Networks.
-   - Creation of a custom algorithm to count exercise repetitions.
-
----
-
-## 1. Introduction
+# Introduction <a id="part-1"></a>
 
 In the past decade, breakthroughs in sensor technology have made wearable devices like accelerometers, gyroscopes, and GPS-receivers more feasible and accessible. Such advancements have propelled the monitoring and classification of human activities to the forefront of pattern recognition and machine learning research. This is majorly due to the immense commercial potential of context-aware applications and evolving user interfaces. Beyond commerce, there's a broader societal impact: addressing challenges related to rehabilitation, sustainability, elderly care, and health.
 
@@ -51,9 +23,9 @@ Stay tuned as we traverse through related works, delve into the data collection 
 ---
 
 
-## Part 2 — Data Processing
+# Part 2 — Data Processing <a id="part-2"></a>
 
-### Introduction to Data Consideration:
+## Introduction to Data Consideration:
 
 Other works have demonstrated the application of various machine learning algorithms to free weight exercise accelerometer data, with significant outcomes. From a strength training standpoint, there seems to be an oversight in collecting quality datasets. This study addresses this gap by creating an experimental environment that replicates real strength training workouts.
 
@@ -64,7 +36,7 @@ Many related studies appear to select random sets of exercises without clear mot
 
 Strength training programs often use terms like sets and repetitions (reps). Here, a rep represents a single completion of an exercise, while a set is a sequence of reps followed by a rest period. "Starting Strength" emphasizes using heavier weights, ideally chosen to allow around five reps per set. The research explores if a trained model can still accurately classify exercises considering these variations and also delves into possible methods to verify exercise form.
 
-### 3.1 Data Collection
+## Data Collection
 
 Instead of solely relying on accelerometer data, like many previous studies, this research harnesses the capabilities of more modern smart devices. These devices, such as smartwatches, come equipped with additional sensors, including gyroscopes. For this study, data was gathered using MbientLab’s wristband sensor research kit, a device that simulates a smartwatch's placement and orientation. The data capture rates were set at 12.500Hz for the accelerometer and 25.000Hz for the gyroscope. Five participants (outlined in Table 1) executed the barbell exercises in both 3 sets of 5 reps and 3 sets of 10 reps. The higher rep sets aim to observe model generalization across different weights, amounting to a total of 150 sets of data. Additionally, 'resting' data was captured between sets without imposing any specific restrictions on the participants.
 
@@ -78,30 +50,30 @@ Instead of solely relying on accelerometer data, like many previous studies, thi
 
 *Table 1. Participants (N=5)*
 
-### 3.2 Weights
+## Weights
 
 To pinpoint the ideal weights for the exercises, the study employed the one rep max (1RM) metric. The 1RM signifies the maximum weight someone can lift in a single repetition. There are various methods to calculate 1RM, with this study utilizing Epley’s formula for its calculations.
 
-### 3.3 Execution Form
+## 3.3 Execution Form
 
 To gauge the quality of exercise execution, additional data was obtained, particularly for the bench press. Participants were instructed to deliberately perform the exercise with errors, such as lowering the bar too high on the chest and not touching the chest altogether.
 
-### 4 Converting Raw Data
+## Converting Raw Data
 
 The raw dataset comprised 69,677 entries, each consisting of a timestamp and x, y, z sensor readings. Given the distinct timestamps for each sensor reading, data needed aggregation. An aggregation step size of Δt = 0.20 s (or five readings per second) was chosen, with numerical values aggregated using the mean and categorical attributes (labels) using the mode.
 
 Two primary strategies were employed to manage the raw data: Low-pass Filtering for individual attributes and Principal Component Analysis (PCA) for the entire dataset.
 
-### 4.1 Low-pass Filter
+## 4.1 Low-pass Filter
 
 The low-pass filter is ideal for temporal data with periodicity. The Butterworth low-pass filter was used to eliminate high-frequency noise potentially affecting the learning process. After thorough inspection, a cut-off point of 1.3 Hz was selected.
 
-### 4.2 Principal Component Analysis
+## 4.2 Principal Component Analysis
 
 A PCA was performed to discern features that explained the majority of variance in the dataset. The results illustrated a rapid decline in explained variance after the first three components. Thus, the study incorporated these three components into the dataset.
 
 
-# Part 5 — Detecting Outliers
+# Detecting Outliers <a id="part-3"></a>
 
 ##  Introduction to Outliers
 Outliers are extreme values that deviate significantly from the other observations in the dataset. These outliers can be genuine observations or result from errors. In this project, we focus on identifying and handling these extreme values to ensure the robustness of our analysis.
@@ -127,7 +99,7 @@ After selecting Chauvenet's criterion as the preferred outlier detection method,
 ## Exporting the Processed Dataframe
 The dataframe, with outliers removed, was saved to an external pickle file for further analysis.
 
-# Part 6 — Feature Engineering
+# Feature Engineering <a id="part-4"></a>
 
 In this section, we delve into the derivation of additional features from the original dataset. These enhancements span various dimensions including aggregated, time-related, frequency, and clustering-based features.
 
@@ -172,7 +144,7 @@ Exploring the potential of cluster memberships aiding label predictions, acceler
 
 
 
-# Part 7 — Predictive Modeling and Counting Reps
+# Predictive Modeling and Counting Reps <a id="part-5"></a>
 
 With the dataset fully processed, it now encompasses 6 basic features, 2 scalar magnitude features, 3 PCA features, 16 time-related features, 12 frequency features, and 1 cluster feature. This section elucidates the methodology and outcomes of constructing models for classification, repetition counting, and form detection.
 
@@ -209,7 +181,7 @@ Further experiments captured data from a participant deliberately performing the
 Model generalization remains paramount. Initial insights on weight classes, as presented in Figure 3 from section 4, hinted at discrepancies in pace between weight classes. Testing models trained on heavy weight data on medium weight sets witnessed a decline in accuracy to 79.97%, with the reverse scenario yielding a comparable 79.51%. Evaluating across participants using a leave-one-out approach yielded an average accuracy of 85.43%.
 
 
-# Conclusion
+# Conclusion <a id="part-6"></a>
 
 Over the course of this project, we delved deep into the realms of biomechanical data processing, feature engineering, and predictive modeling to address key challenges in strength training analytics.
 
