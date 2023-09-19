@@ -258,20 +258,38 @@ Signal processing is a key part of our feature engineering process. The Butterwo
 ## Principal Component Analysis (PCA)
 High dimensionality can often be a challenge in machine learning. PCA aids in dimensionality reduction by transforming the original predictor columns into a set of orthogonal components that capture the most variance. Our analysis indicated that we can effectively capture a significant portion of the variance in the data using just the first three principal components.
 
-## Sum of Squares Attributes
-Post Principal Component Analysis (PCA) processing, a secondary transformation was applied to calculate squared magnitudes for accelerometer and gyroscope readings. By squaring and summing components of both the accelerometer (`acc_x, acc_y, acc_z`) and gyroscope (`gyr_x, gyr_y, gyr_z`), we obtain a singular resultant magnitude for each. These resultant magnitudes were then added to the dataframe, and visualizations were generated for specific subsets of the data.
+<table>
+    <tr>
+        <td>
+            <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/c70e1f24-b97d-465f-8f32-aa463a4311d1" alt="f_3_pca" width="500"/>
+        </td>
+        <td>
+            <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/be59b002-abac-451a-a6b4-fc7ffd44f9dd" alt="expl_var" width="500"/>
+        </td>
+    </tr>
+    <tr>
+        <td style="text-align:center; padding-top:10px;">
+            Description for f_3_pca image
+        </td>
+        <td style="text-align:center; padding-top:10px;">
+            Description for expl_var image
+        </td>
+    </tr>
+</table>
 
-## Temporal Abstraction
-Utilizing the squared magnitudes from the prior step, a temporal abstraction operation was executed. A window size was defined for the abstraction based on data sampling rates. The abstraction involved computing both the mean and standard deviation of the data over the defined window size. This was systematically applied across all unique 'set' values within the data, abstracting the data temporally and enhancing its interpretability.
 
-## Frequency Features
-Moving to the frequency domain, a Fourier Transformation was applied to capture specific frequency domain characteristics, such as maximum frequency, frequency weighting, power spectral entropy, and distinct frequency components. After abstracting the frequency information, subsets of the data were visualized to examine key frequency-based features.
 
-## Overlapping Windows Resolution
-To maintain data consistency, overlapping windows introduced during the frequency transformation phase were addressed. Rows with `NA` values were removed, and overlapping windows were mitigated by methodically skipping every other row.
+
+
+## Sum of Squares Attributes & Temporal Abstraction
+Following the dimensionality reduction achieved through Principal Component Analysis (PCA), we derived squared magnitudes for accelerometer and gyroscope readings to obtain a singular representation of sensor activity intensity. With these magnitudes in hand, a temporal abstraction was performed. This utilized a window-based strategy to segment the data temporally, providing both mean and standard deviation metrics, ultimately enhancing our understanding of the temporal fluctuations in the sensor data.
+
+## Frequency Features & Overlapping Windows Resolution
+Venturing into the frequency domain, we employed Fourier Transformations to extract critical frequency domain attributes such as maximum frequency, frequency weighting, and power spectral entropy. In the wake of these transformations, the challenge of overlapping windows emerged. This was systematically addressed by filtering out rows with `NA` values and strategically skipping every alternate row to ensure non-overlapping, consistent data segments.
 
 ## Clustering Analysis
-With data in its final processed state, a clustering analysis was performed using the k-means clustering algorithm. A range of k-values was assessed to determine the optimal number of clusters, which was deduced by examining the sum of squared distances (inertia) against each k-value. A 3D scatter plot was generated to visualize the clusters, primarily based on accelerometer readings. Subsequent visualization was conducted based on labeled data. Post all transformations and modeling, the final dataset was serialized and exported for subsequent phases of the analysis or deployment.
+With our data processed and refined, it was primed for clustering analysis. Leveraging the k-means clustering algorithm, we assessed a range of potential cluster numbers to discern the optimal cluster count, achieved by examining the sum of squared distances or inertia against each potential cluster number. A 3D scatter plot offered a vivid visualization of the resultant clusters, centered predominantly around accelerometer readings. Further, a distinct visualization based on data labels underscored the efficacy of the clustering. The concluding step in our pipeline involved serializing and exporting the fully processed dataset, paving the way for future analyses or potential deployment scenarios.
+
 
 # Predictive Modeling and Counting Reps <a id="part-5"></a>
 
