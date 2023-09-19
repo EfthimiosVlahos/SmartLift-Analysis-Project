@@ -1,5 +1,6 @@
 # Smart Lift Project
 An innovative exploration into the realm of strength training analytics, leveraging wristband accelerometer and gyroscope data. This project harnesses machine learning models to classify exercises, count repetitions, and detect improper form, aiming to create a digital personal trainer experience.
+
 <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/0a146446-10c4-492e-bba9-527b1e666088" alt="gym" width="100%">
 
 # Table of Contents
