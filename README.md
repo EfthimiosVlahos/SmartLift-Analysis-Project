@@ -387,11 +387,11 @@ Lastly, it's paramount to evaluate the efficacy of our repetition prediction app
 
 The contemporary technological era is ripe with context-aware applications, yet the domain of strength training remained relatively untouched. This research sought to fill this gap, with a focus on strength programs, which has seen little attention from both academia and current activity tracker technologies.
 
-Utilizing wristband accelerometer and gyroscope sensor data, we gathered insights from real strength training sessions of participants. These participants were rigorously tested, using the 1RM metric, ensuring that the data collected was from lifts that were proportionate to each participant's strength. 
+Utilizing wristband accelerometer and gyroscope sensor data, the data was gathere from real strength training sessions of participants. These participants were rigorously tested, using the 1RM metric, ensuring that the data collected was from lifts that were proportionate to each participant's strength. 
 
-The application of machine learning on this data led us to identify Random Forest as the most effective exercise classification model. This model demonstrated an impressive accuracy of 98.51% on unseen instances. However, its prowess was not without its challenges. Specifically, the model faced difficulty in distinguishing between certain exercises like the bench press and overhead press due to their similar wrist orientation. 
+The application of machine learning on this data led me to identify Random Forest as the most effective exercise classification model. This model demonstrated an impressive accuracy of 98.51% on unseen instances (on first run). However, its prowess was not without its challenges. Specifically, the model faced difficulty in distinguishing between certain exercises like the bench press and overhead press due to their similar wrist orientation. 
 
-To further enhance our analysis, a basic peak counting algorithm, bolstered with a robust low-pass filter, was deployed to count repetitions. This approach revealed that for optimal accuracy, models need to be tailored for each exercise individually. Even with its simplicity, the method registered a miscount rate of just 5%.
+To further enhance my analysis, a basic peak counting algorithm, bolstered with a robust low-pass filter, was deployed to count repetitions. This approach revealed that for optimal accuracy, models need to be tailored for each exercise individually. Even with its simplicity, the method registered a miscount rate of just 5%.
 
 In the realm of form detection, another Random Forest model was trained, using data from intentional misperformance of the bench press. The results were promising with an accuracy of 98.53%, hinting at the potential of such models in real-world applications, though with the caveat of the need for more extensive data.
 
