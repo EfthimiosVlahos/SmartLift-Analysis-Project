@@ -215,48 +215,63 @@ Following outlier detection and treatment, the cleaned dataset has been saved an
 
 # Feature Engineering <a id="part-4"></a>
 
-In this section, we delve into the derivation of additional features from the original dataset. These enhancements span various dimensions including aggregated, time-related, frequency, and clustering-based features.
-
-## Aggregated Features
-
-Leveraging the data further, the scalar magnitudes \( r \) of both the accelerometer and gyroscope were derived. The formula for \( r \) is:
-
-\[ r_{\text{magnitude}} = \sqrt{x^2 + y^2 + z^2} \]
-
-The strength of using \( r \) over any specific data direction lies in its impartiality towards device orientation. It provides a robust measurement even when the device undergoes dynamic re-orientations.
-
-## Time Domain
-
-The temporal nature of the dataset was exploited by aggregating numerical data points using standard deviation (sd) and mean. The sd aimed to capture data variations over time, anticipating higher values during exercises and lower ones during rest. Temporal means, meanwhile, shed light on the general levels of data, reducing the noise's influence. Following experimentation with various window sizes (2, 4, and 6 seconds), a 4-second window was finalized for the dataset as seen in Figure 5.
-
-![Numerical temporal aggregation with window sizes of 2, 4, and 6 seconds](path_to_figure_5_image)
-
-## Frequency Domain: Fourier Transformation
-
-The frequency domain was another area of focus. With the help of a Fourier transformation, measurements were represented as combinations of sinusoid functions of varied frequencies. Using the previously selected 4-second window, frequency features like the maximum frequency, frequency signal weighted average, and the power spectral entropy were computed.
-
-## New dataset
-
-Post feature engineering, the dataset was enriched with various new attributes. To avoid redundancy from overlapping time windows, instances that did not meet a maximum overlap criterion were pruned. A 50% overlap was deemed acceptable, leading to a dataset trimmed down to 4,505 instances. This method proved effective against overfitting, despite a slight loss in information.
-
-## Clustering
-
-Exploring the potential of cluster memberships aiding label predictions, acceleration data became the focal point, given that gyroscope data yielded limited value. The k-means clustering method, with \( k=4 \), stood out for its superior silhouette score of 0.6478. The choice of 4 clusters aimed to represent different labels optimally, evident from the distribution in Figure 6 and Table 2. 
-
-![Clusters Visualization](path_to_figure_6_image)
-
-**Table 2: Cluster Coverage**
-
-| Label      | Cluster 1  | Cluster 2 | Cluster 3  | Cluster 4  |
-|------------|:----------:|:---------:|:----------:|:----------:|
-| BenchPress |  99.88%    |  0.12%    |  0.00%     |  0.00%     |
-| Deadlift   |  0.00%     |  0.00%    |  100.00%   |  0.00%     |
-| OHP        |  99.28%    |  0.72%    |  0.00%     |  0.00%     |
-| Row        |  0.00%     |  0.00%    |  100.00%   |  0.00%     |
-| Squat      |  2.98%     |  97.02%   |  0.00%     |  0.00%     |
-| Rest       |  4.14%     |  3.78%    |  50.45%    |  41.62%    |
+## Data Loading and Initial Exploration
+I begin by loading the dataset, which has already been preprocessed to remove outliers based on Chauvenet's criterion. A cursory inspection of the data structure reveals that our primary focus will be on the first six columns, which serve as predictor columns. Some basic visualization techniques, like plotting values from the 'gyr_y' column, aid in initial data understanding. Data often has missing values, which can adversely impact many machine learning algorithms. As a part of our preprocessing pipeline, we've used interpolation to fill in gaps in our data series, specifically in the predictor columns. The built-in `interpolate()` method in Pandas provides a quick and effective way to address this. To understand the data's temporal dimension, we've calculated the duration for each unique set within our dataset. Further insights were gained by plotting values from the 'acc_y' column for specific sets and computing mean durations across different categories.
 
 
+## Feature Engineering: Advanced Transformation and Modeling
+
+<table>
+  <tr>
+    <td>
+      <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/32b704a9-3658-414a-a079-76b2db6c0308" width="400" height="400"/>
+    </td>
+    <td>
+      <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/66cec8c3-a7ca-4b1e-aeb7-dbee3f5a799f" width="400" height="400"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">Interpolation</td>
+    <td align="center">Calculating Duration</td>
+  </tr>
+</table>
+
+## Low-Pass Filtering with Butterworth
+Signal processing is a key part of our feature engineering process. The Butterworth low-pass filter has been employed to reduce high-frequency noise in our data. This step is crucial for highlighting the fundamental patterns in our signals, which would be the focus for any downstream modeling process. The low-pass filter is applied to each of the predictor columns, thereby replacing the original values with their filtered counterparts.
+## Data Preprocessing: Filtering Techniques
+
+<table>
+  <tr>
+    <td>
+      <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/a9a83d5b-c996-4b93-a913-bd92478693b2" width="500" height="400"/>
+    </td>
+    <td>
+      <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/601eb832-8acd-4a22-bed1-55545be7e06b" width="500" height="400"/>
+    </td>
+  </tr>
+  <tr>
+    <td align="center">Low-Pass Code</td>
+    <td align="center"> Compare with and without Low-Pass filter</td>
+  </tr>
+</table>
+
+## Principal Component Analysis (PCA)
+High dimensionality can often be a challenge in machine learning. PCA aids in dimensionality reduction by transforming the original predictor columns into a set of orthogonal components that capture the most variance. Our analysis indicated that we can effectively capture a significant portion of the variance in the data using just the first three principal components.
+
+## Sum of Squares Attributes
+Post Principal Component Analysis (PCA) processing, a secondary transformation was applied to calculate squared magnitudes for accelerometer and gyroscope readings. By squaring and summing components of both the accelerometer (`acc_x, acc_y, acc_z`) and gyroscope (`gyr_x, gyr_y, gyr_z`), we obtain a singular resultant magnitude for each. These resultant magnitudes were then added to the dataframe, and visualizations were generated for specific subsets of the data.
+
+## Temporal Abstraction
+Utilizing the squared magnitudes from the prior step, a temporal abstraction operation was executed. A window size was defined for the abstraction based on data sampling rates. The abstraction involved computing both the mean and standard deviation of the data over the defined window size. This was systematically applied across all unique 'set' values within the data, abstracting the data temporally and enhancing its interpretability.
+
+## Frequency Features
+Moving to the frequency domain, a Fourier Transformation was applied to capture specific frequency domain characteristics, such as maximum frequency, frequency weighting, power spectral entropy, and distinct frequency components. After abstracting the frequency information, subsets of the data were visualized to examine key frequency-based features.
+
+## Overlapping Windows Resolution
+To maintain data consistency, overlapping windows introduced during the frequency transformation phase were addressed. Rows with `NA` values were removed, and overlapping windows were mitigated by methodically skipping every other row.
+
+## Clustering Analysis
+With data in its final processed state, a clustering analysis was performed using the k-means clustering algorithm. A range of k-values was assessed to determine the optimal number of clusters, which was deduced by examining the sum of squared distances (inertia) against each k-value. A 3D scatter plot was generated to visualize the clusters, primarily based on accelerometer readings. Subsequent visualization was conducted based on labeled data. Post all transformations and modeling, the final dataset was serialized and exported for subsequent phases of the analysis or deployment.
 
 # Predictive Modeling and Counting Reps <a id="part-5"></a>
 
