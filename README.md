@@ -338,6 +338,32 @@ Having our data stratified on the participant, the best model (Random Forest) is
 Finally, in our quest for model simplicity without compromising efficacy, we venture into training a feed-forward neural network using a select set of features. The aim is to discern if a simpler model can rival, or potentially outdo, the performance of the more complex Random Forest. As is consistent with our prior evaluations, a confusion matrix follows to illustrate the neural network's classification nuances, providing a holistic understanding of its prediction prowess.
 
 
+
+<table>
+    <tr>
+        <td>
+            <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/c67bc445-ee95-4b25-b0fd-c9854c5784c7" alt="Ordered Features">
+            <p align="center"><b>Ordered Features</b></p>
+        </td>
+        <td>
+            <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/5279143b-696c-4c21-a482-e926d83a0b92" alt="Screenshot 2023-09-19">
+            <p align="center"><b>Evaluation of Models</b></p>
+        </td>
+    </tr>
+</table>
+
+
+
+![acc_diff_features](https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/3b407ae8-1588-45e5-847c-95c64516a5a6)
+*Models on each Feature set*
+
+
+
+
+
+
+
+
 # Repetition Counting <a id="part-7"></a>
 
 Our journey commences by setting the stage with the necessary libraries. Apart from the staple ones like `numpy`, `pandas`, and `matplotlib`, we also rope in `LowPassFilter` from `DataTransformation`. This module is particularly pivotal in noise reduction from our signals.
@@ -372,7 +398,27 @@ Our dataset is then enriched with a 'reps' column, where the number of repetitio
 
 ### Evaluation
 
-Lastly, it's paramount to evaluate the efficacy of our repetition prediction approach. The mean absolute error between actual and predicted repetitions serves as our evaluation metric. A bar plot subsequently offers a visual comparison between these values, segmented by exercise and category.
+Lastly, it's paramount to evaluate the efficacy of our repetition prediction approach. The mean absolute error between actual and predicted repetitions serves as our evaluation metric. A bar plot subsequently offers a visual comparison between these values, segmented by exercise and category
+
+<table>
+    <tr>
+        <td>
+            <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/7cbcbaf2-59ba-4294-a543-09abc1a90ec0" alt="Med_pred_eval">
+            <p align="center"><b>Med Pred Eval</b></p>
+        </td>
+        <td>
+            <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/4ed04fbf-fb1f-45ef-942d-e0a4cea63969" alt="Heavy_pred_count">
+            <p align="center"><b>Heavy Pred Count</b></p>
+        </td>
+    </tr>
+</table>
+
+
+![evaluation_reps](https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/733e004b-32cb-4622-942e-1316d6a43473)
+*Evaluation of Repetitions for Different Exercises or Sets*
+
+
+
 
 
 
