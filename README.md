@@ -269,10 +269,10 @@ High dimensionality can often be a challenge in machine learning. PCA aids in di
     </tr>
     <tr>
         <td style="text-align:center; padding-top:10px;">
-            Description for f_3_pca image
+            Explained variance for each principal component
         </td>
         <td style="text-align:center; padding-top:10px;">
-            Description for expl_var image
+            Elbow Method for PCA
         </td>
     </tr>
 </table>
@@ -291,44 +291,93 @@ Venturing into the frequency domain, we employed Fourier Transformations to extr
 With our data processed and refined, it was primed for clustering analysis. Leveraging the k-means clustering algorithm, we assessed a range of potential cluster numbers to discern the optimal cluster count, achieved by examining the sum of squared distances or inertia against each potential cluster number. A 3D scatter plot offered a vivid visualization of the resultant clusters, centered predominantly around accelerometer readings. Further, a distinct visualization based on data labels underscored the efficacy of the clustering. The concluding step in our pipeline involved serializing and exporting the fully processed dataset, paving the way for future analyses or potential deployment scenarios.
 
 
-# Predictive Modeling and Counting Reps <a id="part-5"></a>
 
-With the dataset fully processed, it now encompasses 6 basic features, 2 scalar magnitude features, 3 PCA features, 16 time-related features, 12 frequency features, and 1 cluster feature. This section elucidates the methodology and outcomes of constructing models for classification, repetition counting, and form detection.
-
-## Classification
-
-Given the temporal nature of our dataset, the training and test sets were partitioned based on exercise sets. To ensure robustness, the models were trained on initial sets of each exercise, weight, and participant combination and tested on subsequent ones.
-
-* **Feature Selection:** Forward feature selection identified the most impactful features. By incrementally adding the best features to a basic decision tree, it became evident that performance plateaued beyond 15 features. The top 5 features in terms of predictive power were: pca 1, acc y, pca 3, gyr x temp std ws 4, and acc r pse.
-
-* **Regularization:** A regularizer was introduced to penalize complexity in models. Figure 7 reveals the nuanced relationship between regularization parameters and model accuracy.
-
-* **Models:** An ensemble of models (Neural Network, Random Forest, Support Vector Machine, K-nearest Neighbours, Decision Tree, and Naive Bayes) underwent testing. A comprehensive grid search was executed for all models.
-
-![Impact of Regularization on Performance](path_to_figure_7_image)
-
-## Classification Results
-
-Figure 8 displays the performance of each model, color-coded by the feature sets described in [2]. With these insights, the Random Forest model was finetuned using the 15 most influential features. Optimal parameters discerned through 5-fold cross validation and grid search were: minimum samples per leaf - 2, n-estimators - 100, and criterion - gini. The Random Forest model boasts an impressive accuracy of 98.51% on the test set, as visualized in the accompanying confusion matrix.
-
-![Random Forest Performance and Classification Confusion Matrix](path_to_figure_8_image)
-
-## Counting Repetitions
-
-Repetition counting hinged on a peak counting algorithm employed on scalar magnitude acceleration data. With a low-pass filter (cut-off at 0.4 Hz) weeding out minor local peaks, individual exercise adjustments enhanced accuracy. Particularly, the deadlift and overhead press benefited from counting troughs, or minimum values. On the whole, this counting strategy had a modest 5% error rate across the dataset, with an exemplar of 10 deadlift repetitions illustrated in Figure 9.
-
-![Counting Deadlift Repetitions Visualization](path_to_figure_9_image)
-
-## Detecting Improper Form
-
-Further experiments captured data from a participant deliberately performing the bench press with erroneous form, such as misplacing the bar on the chest or avoiding contact altogether. A Random Forest model, akin to the classification one, was trained to discern form accuracy. Three labels were used: correct form, too high, and no touch. With a dataset of 1098 instances, the model exhibited an accuracy of 98.53% on the test set.
-
-## Generalization
-
-Model generalization remains paramount. Initial insights on weight classes, as presented in Figure 3 from section 4, hinted at discrepancies in pace between weight classes. Testing models trained on heavy weight data on medium weight sets witnessed a decline in accuracy to 79.97%, with the reverse scenario yielding a comparable 79.51%. Evaluating across participants using a leave-one-out approach yielded an average accuracy of 85.43%.
+![clustering](https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/db0069ef-7bba-4281-9233-f8eac8bc183d)
+*Fig. 1. Clustering based off label*
 
 
-# Conclusion <a id="part-6"></a>
+
+
+# Predictive Modeling <a id="part-5"></a>
+
+In the predictive modeling and rep counting section, we begin with the necessary data preparations. After importing the essential libraries, the dataset is loaded from the `03_data_features.pkl` file. We drop non-relevant columns such as `participant`, `category`, and `set`. The dataset is then divided into features (X) and the target label (y). We utilize a 75-25 train-test split, ensuring an even distribution of the target variable `label` across both subsets. To visualize the distribution of our target variable, we plot the `label` distribution for the full, training, and test sets.
+
+Following data preparation, we delve into feature engineering. Features are categorized based on their characteristics, such as Basic Features (most likely derived from accelerometer and gyroscope data), Squared Features (which represent magnitudes), PCA Features, Time-Related Features, Frequency-Related Features, and Cluster Features. Using these categories, we form four distinct combinations of feature sets for model training.
+
+The next step involves forward feature selection using a simple decision tree. This iterative process starts with no features and successively adds features that optimize model accuracy. A visual representation illustrates the progression of accuracy as more features are incrementally included.
+
+Lastly, we embark on the model training and evaluation phase. Using the various feature subsets, several models are trained, namely Neural Network, Random Forest, Decision Tree, and Naive Bayes. Each model's performance is gauged using accuracy and stored in a DataFrame. Notably, non-deterministic classifiers like Neural Networks and Random Forests undergo multiple training iterations to provide a more stable performance estimate. The culmination of this section aims to identify the optimal feature-model combination that best encapsulates the inherent patterns in the data, facilitating effective predictive modeling and rep counting.
+
+
+
+<table>
+    <tr>
+        <td>
+            <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/ffee6b7f-6e0f-4cf8-b259-d1759188ebbd" alt="Feature Splitting" >
+            <p align="center"><b>Feature Splitting</b></p>
+        </td>
+        <td>
+            <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/8716cc15-8065-4f37-bab2-0b9a0ae4e0b5" alt="Grid Search and Model Performance">
+            <p align="center"><b>Grid Search and Model Performance</b></p>
+        </td>
+    </tr>
+</table>
+
+
+
+## Models 
+
+We kick off this section by plotting a grouped bar plot to visually compare the accuracy of different models with varied feature sets. After sorting our score DataFrame based on descending accuracy values, we employ Seaborn's `barplot` to render this visualization. This plot is instrumental in distinguishing the top-performing model-feature set combinations at a glance.
+
+Moving on, the spotlight is cast upon the best performing model: the Random Forest classifier. It's trained and evaluated on `feature_set_4`. Post-training, we leverage a confusion matrix to gauge the model's performance intricacies. This matrix elucidates the true positives, true negatives, false positives, and false negatives, providing an in-depth perspective on classification results.
+
+Next, our focus shifts to participant-based data segregation. We curate our training and testing sets based on a particular participant, labeled "A". After filtering, the `participant` column is removed to avoid redundancy. We then visualize the distribution of labels within these newly formed datasets. The distribution ensures we have a comprehensive understanding of the class balance, or potential imbalance, between our training and testing sets.
+
+Having our data stratified on the participant, the best model (Random Forest) is put to the test again. As before, post-training, we employ a confusion matrix to shed light on its classification nuances. This matrix is particularly useful in observing any performance disparities when models are trained and tested on data segregated based on individual participants.
+
+Finally, in our quest for model simplicity without compromising efficacy, we venture into training a feed-forward neural network using a select set of features. The aim is to discern if a simpler model can rival, or potentially outdo, the performance of the more complex Random Forest. As is consistent with our prior evaluations, a confusion matrix follows to illustrate the neural network's classification nuances, providing a holistic understanding of its prediction prowess.
+
+
+# Repetition Counting <a id="part-7"></a>
+
+Our journey commences by setting the stage with the necessary libraries. Apart from the staple ones like `numpy`, `pandas`, and `matplotlib`, we also rope in `LowPassFilter` from `DataTransformation`. This module is particularly pivotal in noise reduction from our signals.
+
+The default Pandas chained assignment warning is silenced, ensuring that the exploratory data analysis remains unhindered by unwanted warnings.
+
+Our plotting preferences lean towards the "fivethirtyeight" style, often regarded for its visually pleasing aesthetics. With figure size and DPI set, our plots promise clarity and precision.
+
+## Data Loading and Feature Engineering
+
+We initiate by loading the processed data. Here, records with the label "rest" are excluded, perhaps owing to their irrelevance for the current analysis. Features capturing the magnitude of acceleration (`acc_r`) and gyroscope (`gyr_r`) are then calculated, which can be particularly insightful when distinguishing movements based on their intensities.
+
+## Dataset Segmentation
+
+For ease of analysis, our primary dataset is bifurcated into five subsets based on distinct exercise labels. This enables us to drill deeper into patterns unique to each exercise.
+
+## Data Visualization
+
+To discern underlying patterns, a subset of the bench press data is visualized. The aim is to juxtapose readings from the accelerometer's three axes with their resultant magnitude. Similar visual insights are derived for gyroscope readings.
+
+## Noise Reduction with LowPassFilter
+
+Signal noise can be a significant impediment, often masquerading genuine patterns. Hence, a LowPass filter, which attenuates high-frequency noise, is applied to our dataset. It's particularly enlightening to visualize how the original signal differs post this filtration.
+
+### Repetition Counting
+
+With noise filtered, we embark on the crucial task of repetition counting. The function `count_reps` aids in counting peaks, which essentially translate to repetitions in our exercises. Visual aids, like marking these peaks, ensure that the counting logic is verifiable.
+
+### Benchmarking and Repetition Prediction
+
+Our dataset is then enriched with a 'reps' column, where the number of repetitions is benchmarked based on the exercise category. Following this, a DataFrame, `rep_df`, is curated, which aims to compare actual repetitions with predicted ones. This comparison is achieved by employing the earlier defined `count_reps` function.
+
+### Evaluation
+
+Lastly, it's paramount to evaluate the efficacy of our repetition prediction approach. The mean absolute error between actual and predicted repetitions serves as our evaluation metric. A bar plot subsequently offers a visual comparison between these values, segmented by exercise and category.
+
+
+
+
+# Conclusion <a id="part-7"></a>
 
 Over the course of this project, we delved deep into the realms of biomechanical data processing, feature engineering, and predictive modeling to address key challenges in strength training analytics.
 
