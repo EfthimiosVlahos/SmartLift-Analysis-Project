@@ -1,7 +1,7 @@
 # Smart Lift Project
 <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/0a146446-10c4-492e-bba9-527b1e666088" alt="gym" width="100%">
 
-## Table of Contents
+# Table of Contents
 - [Introduction, Goal, and Context](#part-1)
 - [Data Processing](#part-2)
 - [Outlier Handling](#part-3)
@@ -17,24 +17,12 @@ Historically, the focus was largely on tracking aerobic exercises. Systems exist
 
 Digital personal trainers might soon be a reality, with advancements in context-aware applications. While there have been significant strides towards this future, there remains a vital component yet unaddressed: tracking workouts effectively and ensuring safety and progress.
 
-Inspired by Dave Ebbelaar and his classmates, this project sets its sight on a niche yet profound aspect of fitness technology. By tapping into the potential of the strength training arena and leveraging wristband accelerometer and gyroscope data, the foundation is formed. This pivotal data, amassed during free weight workouts from five distinct participants, offers invaluable insights. The paramount ambition of this endeavor? To architect models that emulate the precision and expertise of human personal trainers—models adept at tracking exercises, enumerating repetitions, and discerning improper form. Interested in delving deeper? Explore the [dataset](https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/tree/main/data/raw)
- to uncover the nuances of our approach.
+Inspired by Dave Ebbelaar and his classmates at Vrije Universiteit Amsterdam, this project sets its sight on a niche yet profound aspect of fitness technology. By tapping into the potential of the strength training arena and leveraging wristband accelerometer and gyroscope data, the foundation is formed. This pivotal data, amassed during free weight workouts from five distinct participants, offers invaluable insights. The paramount ambition of this endeavor? To architect models that emulate the precision and expertise of human personal trainers—models adept at tracking exercises, enumerating repetitions, and discerning improper form. Here is the [dataset](https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/tree/main/data/raw).
 
 ---
 
 
 # Data Processing <a id="part-2"></a>
-
-## Introduction to Data Consideration:
-
-Other works have demonstrated the application of various machine learning algorithms to free weight exercise accelerometer data, with significant outcomes. From a strength training standpoint, there seems to be an oversight in collecting quality datasets. This study addresses this gap by creating an experimental environment that replicates real strength training workouts.
-
-Many related studies appear to select random sets of exercises without clear motivations for their choices. While capturing a broad range of exercises is vital, this research narrows its focus to the exercises from the "Starting Strength" training program by Mark Rippetoe. This decision aims to avoid noise from exercise combinations that wouldn't typically be performed together in genuine workout scenarios. The "Starting Strength" program encompasses five primary barbell exercises: Bench Press, Deadlift, Overhead Press, Row, and Squat, as visualized in Figure 1.
-
-![Basic Barbell Exercises](path_to_image)  
-*Fig. 1. Basic Barbell Exercises*
-
-Strength training programs often use terms like sets and repetitions (reps). Here, a rep represents a single completion of an exercise, while a set is a sequence of reps followed by a rest period. "Starting Strength" emphasizes using heavier weights, ideally chosen to allow around five reps per set. The research explores if a trained model can still accurately classify exercises considering these variations and also delves into possible methods to verify exercise form.
 
 ## Data Collection
 
@@ -53,17 +41,17 @@ Instead of solely relying on accelerometer data, like many previous studies, thi
 
 ## Preparing Dataset
 
-By loading individual accelerometer and gyroscope CSV files located in the MetaMotion directory. Every CSV file present in this directory is cataloged for easy referencing. From each file's name, vital metadata such as the participant's identity, exercise label, and the activity's category are extrapolated. 
+By loading individual accelerometer and gyroscope CSV files located in the MetaMotion directory, every CSV file present in this directory is cataloged for easy referencing. From each file's name, vital metadata such as the participant's identity, exercise label, and the activity's category are extrapolated. 
 
-Utilizing this mined information, we initialize dataframes specifically for the accelerometer and gyroscope data. As we traverse through the list of files, the data is read, categorized based on its source (either accelerometer or gyroscope), and then amalgamated into the respective dataframe. To optimize the data processing workflow, we've encapsulated the logic for parsing and categorizing the data within the `read_data_from_files` function. This function not only amalgamates the data but also manages timestamp conversions and eradicates redundant columns. 
+Utilizing this mined information, I initialize dataframes specifically for the accelerometer and gyroscope data. As I traverse through the list of files, the data is read, categorized based on its source (either accelerometer or gyroscope), and then amalgamated into the respective dataframe. To optimize the data processing workflow, I encapsulated the logic for parsing and categorizing the data within the `read_data_from_files` function. This function not only amalgamates the data but also manages timestamp conversions and eradicates redundant columns. 
 
-Post the utilization of this function on all files, we combine the accelerometer and gyroscope datasets. To maintain data uniformity and facilitate its manageability, the consolidated data undergoes a resampling process based on designated frequency parameters. Concluding the data processing phase, the cleansed and structured data is archived into a new file, rendering it primed for the subsequent stages of analysis.
+Post the utilization of this function on all files, I combine the accelerometer and gyroscope datasets. To maintain data uniformity and facilitate its manageability, the consolidated data undergoes a resampling process based on designated frequency parameters. Concluding the data processing phase, the cleansed and structured data is archived into a new file, rendering it primed for the subsequent stages of analysis.
 
 
 <table>
   <tr>
-    <td><img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/d2e278cd-811b-4828-8afb-15e551497641" height="400" width="400"></td>
-    <td><img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/3d62c5cc-6e74-44a3-a82f-e29bbb963555" height="400" width="400"></td>
+    <td><img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/d2e278cd-811b-4828-8afb-15e551497641" height="500" width="500"></td>
+    <td><img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/3d62c5cc-6e74-44a3-a82f-e29bbb963555" height="500" width="500"></td>
   </tr>
   <tr>
     <td colspan="2" style="text-align:center">Figure 1: Preparing Dataset</td>
@@ -82,9 +70,7 @@ Two primary strategies were employed to manage the raw data: Low-pass Filtering 
 
 ## EDA
 
-In this project, I utilized Python's renowned data manipulation and visualization libraries, pandas and Matplotlib, to probe into accelerometer and gyroscope data. My exploration started by visualizing the 'acc_y' column data for the initial set of exercises. To grasp the distinct characteristics of various exercises, I navigated through the unique exercise labels and plotted the 'acc_y' column for each. This approach showcased both the full dataset and a truncated first 100 rows, offering not just a comparative view of exercises but also an immediate glimpse of early data patterns.
-
-Delving deeper, I fine-tuned the visual settings using Matplotlib to meet my analytical requirements. I then compared the 'acc_y' data between medium vs. heavy sets and across different participants for chosen exercises. This exploration unveiled a holistic perspective as I plotted all the accelerometer axes concurrently, leading to a thorough comprehension of the exercise data.
+In this project, I utilized Python's renowned data manipulation and visualization libraries, pandas, Matplotlib, and seaborn to probe into accelerometer and gyroscope data. My exploration started by visualizing the 'acc_y' column data for the initial set of exercises. To grasp the distinct characteristics of various exercises, I navigated through the unique exercise labels and plotted the 'acc_y' column for each. This approach showcased both the full dataset and a truncated first 100 rows, offering not just a comparative view of exercises but also an immediate glimpse of early data patterns.
 
 Broadening the scope, I cycled through all the combinations of exercises and participants. This approach provided a detailed and overarching view of the accelerometer and gyroscope data. This depth of analysis was pivotal when trying to discern the subtle differences and parallels between participants for each exercise. Concluding the visualization, I merged accelerometer and gyroscope plots into a unified figure. I also journeyed through all exercise and participant combinations, devising combined plots for both sensors. These intricate visualizations were subsequently saved for further analysis and reference.
 
@@ -101,13 +87,11 @@ Broadening the scope, I cycled through all the combinations of exercises and par
 *Figure: Accelerometer and gyroscope plots in a single figure for a specific participant and exercise label*
 
 
-# Detecting Outliers <a id="part-3"></a>
-
-Within the SmartLift Analysis, ensuring the quality of the data is paramount. This document provides a deep dive into the methodologies implemented for outlier detection, crucial to data integrity and the subsequent analysis.
+# Outlier Handling <a id="part-3"></a>
 
 ## Visualization of Outliers
 
-Data visualization plays a pivotal role in the early identification of outliers. Utilizing the `matplotlib` library, the data was visualized using boxplots, allowing for a quick assessment of data spread and potential outliers. Specific columns such as `'acc_x'` and `'gyr_y'` were singled out for detailed visual representation.
+Data visualization plays a pivotal role in the early identification of outliers. Utilizing visualization libraries, the data was visualized using boxplots, allowing for a quick assessment of data spread and potential outliers. Specific columns such as `'acc_x'` and `'gyr_y'` were singled out for detailed visual representation.
 
 
 <table>
@@ -128,8 +112,6 @@ Data visualization plays a pivotal role in the early identification of outliers.
     </td>
   </tr>
 </table>
-
-
 
 
 ## Interquartile Range (IQR)
@@ -162,10 +144,10 @@ The `mark_outliers_lof` function has been used to detect and mark outliers based
 <table>
   <tr>
     <td>
-        <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/3763e81d-ed19-45ac-9dfb-b5bd6e77f586" alt="Chauvanet" height="400" width="400"/>
+        <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/3763e81d-ed19-45ac-9dfb-b5bd6e77f586" alt="Chauvanet" height="500" width="500"/>
     </td>
     <td>
-        <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/29b8a40f-2cb1-41a8-a41d-bdaf6a3f8efe" alt="LOF" height="400" width="400"/>
+        <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/29b8a40f-2cb1-41a8-a41d-bdaf6a3f8efe" alt="LOF" height="500" width="500"/>
     </td>
   </tr>
   <tr>
@@ -194,10 +176,10 @@ Following outlier detection and treatment, the cleaned dataset has been saved an
 <table>
   <tr>
     <td>
-        <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/979b9c94-bab5-4571-965a-774a640e0153" alt="Mark_outliers" height="300"/>
+        <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/979b9c94-bab5-4571-965a-774a640e0153" alt="Mark_outliers" height="500" width="500"/>
     </td>
     <td>
-        <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/ee3b4efe-5d85-4cfc-b59b-0e521eda5bf9" alt="NAN" height="300"/>
+        <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/ee3b4efe-5d85-4cfc-b59b-0e521eda5bf9" alt="NAN" height="500" width="500"/>
     </td>
   </tr>
   <tr>
@@ -220,16 +202,13 @@ Following outlier detection and treatment, the cleaned dataset has been saved an
 ## Data Loading and Initial Exploration
 I begin by loading the dataset, which has already been preprocessed to remove outliers based on Chauvenet's criterion. A cursory inspection of the data structure reveals that our primary focus will be on the first six columns, which serve as predictor columns. Some basic visualization techniques, like plotting values from the 'gyr_y' column, aid in initial data understanding. Data often has missing values, which can adversely impact many machine learning algorithms. As a part of our preprocessing pipeline, we've used interpolation to fill in gaps in our data series, specifically in the predictor columns. The built-in `interpolate()` method in Pandas provides a quick and effective way to address this. To understand the data's temporal dimension, we've calculated the duration for each unique set within our dataset. Further insights were gained by plotting values from the 'acc_y' column for specific sets and computing mean durations across different categories.
 
-
-## Feature Engineering: Advanced Transformation and Modeling
-
 <table>
   <tr>
     <td>
-      <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/32b704a9-3658-414a-a079-76b2db6c0308" width="400" height="400"/>
+      <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/32b704a9-3658-414a-a079-76b2db6c0308" width="500" height="500"/>
     </td>
     <td>
-      <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/66cec8c3-a7ca-4b1e-aeb7-dbee3f5a799f" width="400" height="400"/>
+      <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/66cec8c3-a7ca-4b1e-aeb7-dbee3f5a799f" width="500" height="500"/>
     </td>
   </tr>
   <tr>
