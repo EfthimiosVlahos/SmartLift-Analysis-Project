@@ -1,4 +1,5 @@
 # Smart Lift Project
+<img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/0a146446-10c4-492e-bba9-527b1e666088" alt="gym" width="100%">
 
 ## Table of Contents
 - [Introduction, Goal, and Context](#part-1)
@@ -16,7 +17,8 @@ Historically, the focus was largely on tracking aerobic exercises. Systems exist
 
 Digital personal trainers might soon be a reality, with advancements in context-aware applications. While there have been significant strides towards this future, there remains a vital component yet unaddressed: tracking workouts effectively and ensuring safety and progress.
 
-This project is centered around this very aspect: exploring possibilities within the strength training domain by leveraging wristband accelerometer and gyroscope data. This data, collected during free weight workouts from five participants, serves as the foundation. The overarching goal? Build models akin to human personal trainers that can track exercises, count repetitions, and detect improper form.
+Inspired by Dave Ebbelaar and his classmates, this project sets its sight on a niche yet profound aspect of fitness technology. By tapping into the potential of the strength training arena and leveraging wristband accelerometer and gyroscope data, the foundation is formed. This pivotal data, amassed during free weight workouts from five distinct participants, offers invaluable insights. The paramount ambition of this endeavor? To architect models that emulate the precision and expertise of human personal trainers—models adept at tracking exercises, enumerating repetitions, and discerning improper form. Interested in delving deeper? Explore the [dataset](https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/tree/main/data/raw)
+ to uncover the nuances of our approach.
 
 ---
 
