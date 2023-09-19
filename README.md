@@ -361,7 +361,9 @@ Our dataset is then enriched with a 'reps' column, where the number of repetitio
 
 ## Evaluation
 
-Lastly, it's paramount to evaluate the efficacy of our repetition prediction approach. The mean absolute error between actual and predicted repetitions serves as our evaluation metric. A bar plot subsequently offers a visual comparison between these values, segmented by exercise and category
+Lastly, it's paramount to evaluate the efficacy of our repetition prediction approach. The mean absolute error between actual and predicted repetitions serves as our evaluation metric. **A Mean Absolute Error (MAE) of 1.02** was achieved in this regard. A bar plot subsequently offers a visual comparison between these values, segmented by exercise and category.
+
+
 
 <table>
     <tr>
