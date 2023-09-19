@@ -425,18 +425,17 @@ Lastly, it's paramount to evaluate the efficacy of our repetition prediction app
 
 # Conclusion <a id="part-7"></a>
 
-Over the course of this project, we delved deep into the realms of biomechanical data processing, feature engineering, and predictive modeling to address key challenges in strength training analytics.
+The contemporary technological era is ripe with context-aware applications, yet the domain of strength training remained relatively untouched. This research sought to fill this gap, with a focus on strength programs, which has seen little attention from both academia and current activity tracker technologies.
 
-1. **Rich Feature Engineering:** Our comprehensive approach to extracting features from raw accelerometer and gyroscope readings, leveraging techniques from aggregation, time-domain analysis, frequency-domain (Fourier Transformation), and clustering, unveiled novel patterns and insights from the data, setting a solid foundation for subsequent modeling.
+Utilizing wristband accelerometer and gyroscope sensor data, we gathered insights from real strength training sessions of participants. These participants were rigorously tested, using the 1RM metric, ensuring that the data collected was from lifts that were proportionate to each participant's strength. 
 
-2. **Classification Excellence:** Through meticulous model selection and tuning, our Random Forest model stood out, achieving an astounding accuracy of 98.51% for exercise classification, solidifying the effectiveness of our feature engineering endeavors.
+The application of machine learning on this data led us to identify Random Forest as the most effective exercise classification model. This model demonstrated an impressive accuracy of 98.51% on unseen instances. However, its prowess was not without its challenges. Specifically, the model faced difficulty in distinguishing between certain exercises like the bench press and overhead press due to their similar wrist orientation. 
 
-3. **Repetition Counting:** The peak counting algorithm, tailored to specific exercises, demonstrated its prowess with a decent accuracy, with the most notable success in deadlifts and overhead presses.
+To further enhance our analysis, a basic peak counting algorithm, bolstered with a robust low-pass filter, was deployed to count repetitions. This approach revealed that for optimal accuracy, models need to be tailored for each exercise individually. Even with its simplicity, the method registered a miscount rate of just 5%.
 
-4. **Form Detection:** The ability to discern improper form in exercises like the bench press with a staggering accuracy of 98.53% underscores the potential of our approach in ensuring safe and effective strength training. Such analytics could be invaluable for trainers and trainees alike, emphasizing proper form for optimal gains and injury prevention.
+In the realm of form detection, another Random Forest model was trained, using data from intentional misperformance of the bench press. The results were promising with an accuracy of 98.53%, hinting at the potential of such models in real-world applications, though with the caveat of the need for more extensive data.
 
-5. **Generalization Insights:** While our models showcased significant prowess, the variations in accuracy based on different weight classes and participants underscore the ever-present challenges in model generalization. Yet, the attained average accuracy of 85.43% across participants remains commendable.
+While the outcomes of this research are promising, suggesting potential commercial applications, some tests highlighted issues with model generalization. Addressing this would require vast and diverse training data. Despite this, the study paves the way for the development of digital personal trainers, ushering in an era where personalized strength training guidance is available right from our wrists, aiding us in achieving our health and fitness aspirations.
 
-Moving forward, the techniques and insights gleaned from this project bear the potential to revolutionize the domain of strength training analytics. By combining raw biomechanical data with sophisticated algorithms, we pave the way for more informed, safe, and effective training regimens. The promise of real-time feedback on form and counting, backed by such robust analytics, could truly elevate the training experience for many.
 
 
