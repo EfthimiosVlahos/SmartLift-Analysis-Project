@@ -18,12 +18,10 @@ Digital personal trainers might soon be a reality, with advancements in context-
 
 This project is centered around this very aspect: exploring possibilities within the strength training domain by leveraging wristband accelerometer and gyroscope data. This data, collected during free weight workouts from five participants, serves as the foundation. The overarching goal? Build models akin to human personal trainers that can track exercises, count repetitions, and detect improper form.
 
-Stay tuned as we traverse through related works, delve into the data collection method, process raw data, engineer features, build predictive models, and draw conclusions.
-
 ---
 
 
-# Part 2 — Data Processing <a id="part-2"></a>
+# Data Processing <a id="part-2"></a>
 
 ## Introduction to Data Consideration:
 
@@ -50,13 +48,28 @@ Instead of solely relying on accelerometer data, like many previous studies, thi
 
 *Table 1. Participants (N=5)*
 
-## Weights
 
-To pinpoint the ideal weights for the exercises, the study employed the one rep max (1RM) metric. The 1RM signifies the maximum weight someone can lift in a single repetition. There are various methods to calculate 1RM, with this study utilizing Epley’s formula for its calculations.
+## Preparing Dataset
 
-## 3.3 Execution Form
+By loading individual accelerometer and gyroscope CSV files located in the MetaMotion directory. Every CSV file present in this directory is cataloged for easy referencing. From each file's name, vital metadata such as the participant's identity, exercise label, and the activity's category are extrapolated. 
 
-To gauge the quality of exercise execution, additional data was obtained, particularly for the bench press. Participants were instructed to deliberately perform the exercise with errors, such as lowering the bar too high on the chest and not touching the chest altogether.
+Utilizing this mined information, we initialize dataframes specifically for the accelerometer and gyroscope data. As we traverse through the list of files, the data is read, categorized based on its source (either accelerometer or gyroscope), and then amalgamated into the respective dataframe. To optimize the data processing workflow, we've encapsulated the logic for parsing and categorizing the data within the `read_data_from_files` function. This function not only amalgamates the data but also manages timestamp conversions and eradicates redundant columns. 
+
+Post the utilization of this function on all files, we combine the accelerometer and gyroscope datasets. To maintain data uniformity and facilitate its manageability, the consolidated data undergoes a resampling process based on designated frequency parameters. Concluding the data processing phase, the cleansed and structured data is archived into a new file, rendering it primed for the subsequent stages of analysis.
+
+
+<table>
+  <tr>
+    <td><img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/d2e278cd-811b-4828-8afb-15e551497641" height="400" width="400"></td>
+    <td><img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/3d62c5cc-6e74-44a3-a82f-e29bbb963555" height="400" width="400"></td>
+  </tr>
+  <tr>
+    <td colspan="2" style="text-align:center">Figure 1: Preparing Dataset</td>
+  </tr>
+</table>
+
+
+
 
 ## Converting Raw Data
 
@@ -64,40 +77,141 @@ The raw dataset comprised 69,677 entries, each consisting of a timestamp and x, 
 
 Two primary strategies were employed to manage the raw data: Low-pass Filtering for individual attributes and Principal Component Analysis (PCA) for the entire dataset.
 
-## 4.1 Low-pass Filter
 
-The low-pass filter is ideal for temporal data with periodicity. The Butterworth low-pass filter was used to eliminate high-frequency noise potentially affecting the learning process. After thorough inspection, a cut-off point of 1.3 Hz was selected.
+## EDA
 
-## 4.2 Principal Component Analysis
+In this project, I utilized Python's renowned data manipulation and visualization libraries, pandas and Matplotlib, to probe into accelerometer and gyroscope data. My exploration started by visualizing the 'acc_y' column data for the initial set of exercises. To grasp the distinct characteristics of various exercises, I navigated through the unique exercise labels and plotted the 'acc_y' column for each. This approach showcased both the full dataset and a truncated first 100 rows, offering not just a comparative view of exercises but also an immediate glimpse of early data patterns.
 
-A PCA was performed to discern features that explained the majority of variance in the dataset. The results illustrated a rapid decline in explained variance after the first three components. Thus, the study incorporated these three components into the dataset.
+Delving deeper, I fine-tuned the visual settings using Matplotlib to meet my analytical requirements. I then compared the 'acc_y' data between medium vs. heavy sets and across different participants for chosen exercises. This exploration unveiled a holistic perspective as I plotted all the accelerometer axes concurrently, leading to a thorough comprehension of the exercise data.
+
+Broadening the scope, I cycled through all the combinations of exercises and participants. This approach provided a detailed and overarching view of the accelerometer and gyroscope data. This depth of analysis was pivotal when trying to discern the subtle differences and parallels between participants for each exercise. Concluding the visualization, I merged accelerometer and gyroscope plots into a unified figure. I also journeyed through all exercise and participant combinations, devising combined plots for both sensors. These intricate visualizations were subsequently saved for further analysis and reference.
+
+![acc_y_med_v_heavy](https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/aa6e437b-1c15-4c89-a63f-d62cf988d08a)
+*Figure: 'acc_y' data between medium vs. heavy sets and across different participants for chosen exercises*
+
+![acc_y_data_across_part](https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/760ec5ce-2de1-4a64-881e-d4fbf701dd32)
+*Figure: 'acc_y' across different participants for a specific exercise label*
+
+![acc_squat](https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/b18cc1f2-bcee-4b13-a090-3638255dbe9f)
+*Figure: Plot all accelerometer axis data for a specific participant and exercise label (squat)*
+
+![acc_gyr_plot](https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/b5e00eea-0d2f-4bd6-af51-0b4ea5a74154)
+*Figure: Accelerometer and gyroscope plots in a single figure for a specific participant and exercise label*
 
 
 # Detecting Outliers <a id="part-3"></a>
 
-##  Introduction to Outliers
-Outliers are extreme values that deviate significantly from the other observations in the dataset. These outliers can be genuine observations or result from errors. In this project, we focus on identifying and handling these extreme values to ensure the robustness of our analysis.
+Within the SmartLift Analysis, ensuring the quality of the data is paramount. This document provides a deep dive into the methodologies implemented for outlier detection, crucial to data integrity and the subsequent analysis.
 
-## Boxplots and Interquartile Range (IQR)
-Boxplots were used to visualize potential outliers across different sensor readings. The IQR method was employed to determine outliers, marking values outside 1.5 times the IQR as outliers.
+## Visualization of Outliers
 
-## Plotting Outliers Over Time
-Outliers were visualized over time using a custom function. This allowed for easy identification of patterns or anomalies within the data.
+Data visualization plays a pivotal role in the early identification of outliers. Utilizing the `matplotlib` library, the data was visualized using boxplots, allowing for a quick assessment of data spread and potential outliers. Specific columns such as `'acc_x'` and `'gyr_y'` were singled out for detailed visual representation.
 
-## Distribution-based Outlier Detection: Chauvenet’s Criterion
-The data distribution was first visualized using histograms. Chauvenet's criterion, which assumes a normal distribution, was then applied to mark outliers.
 
-## Distance-based Outlier Detection: Local Outlier Factor (LOF)
-LOF was employed to detect outliers by comparing the density deviation of an instance with that of its neighbors.
+<table>
+  <tr>
+    <td>
+        <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/0e38d223-5800-4324-b459-4a91fb7e77c0" alt="acc_x_groupby_label"/>
+    </td>
+    <td>
+        <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/5498aaf7-9974-4059-997a-88dd8efbb818" alt="gyr_y_groupby_label"/>
+    </td>
+  </tr>
+  <tr>
+    <td>
+        acc_x grouped by label
+    </td>
+    <td>
+        gyr_y grouped by label
+    </td>
+  </tr>
+</table>
 
-## Outliers Grouped by Labels
-To understand the impact of outliers within different labels or categories, outliers were detected and visualized for each label separately.
 
-## Handling and Replacing Outliers
-After selecting Chauvenet's criterion as the preferred outlier detection method, the outliers were replaced with NaN values to maintain the dataset's integrity without the influence of these extreme values.
 
-## Exporting the Processed Dataframe
-The dataframe, with outliers removed, was saved to an external pickle file for further analysis.
+
+## Interquartile Range (IQR)
+
+The IQR method, widely recognized for its efficacy, identifies outliers based on quartiles of the dataset:
+1. First (Q1) and third (Q3) quartiles are computed.
+2. IQR is derived as the difference between Q3 and Q1.
+3. Lower and upper bounds are calculated as: 
+   - `Lower Bound = Q1 - 1.5 x IQR`
+   - `Upper Bound = Q3 + 1.5 x IQR`
+4. Data points falling outside these bounds are deemed outliers.
+
+The function `mark_outliers_iqr` has been employed to mark outliers using the IQR method.
+
+### Chauvenet's Criterion
+
+Chauvenet's criterion assumes a normal distribution for data. For each data point:
+1. The probability of observing its value, given the mean and standard deviation, is ascertained.
+2. This probability is benchmarked against a specific criterion value; values falling below this threshold are tagged as outliers.
+
+Each column in the dataset was assessed for outliers using Chauvenet's criterion. The visualization is achieved through the `plot_binary_outliers` function.
+
+### Local Outlier Factor (LOF)
+
+LOF is an outlier detection method grounded on the concept of data density. It assesses the local density deviation of a data point compared to its neighbors. Data points with a significantly lower density than their neighbors are treated as outliers.
+
+The `mark_outliers_lof` function has been used to detect and mark outliers based on LOF.
+
+
+<table>
+  <tr>
+    <td>
+        <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/3763e81d-ed19-45ac-9dfb-b5bd6e77f586" alt="Chauvanet" height="400" width="400"/>
+    </td>
+    <td>
+        <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/29b8a40f-2cb1-41a8-a41d-bdaf6a3f8efe" alt="LOF" height="400" width="400"/>
+    </td>
+  </tr>
+  <tr>
+    <td>
+        Chauvanet Method
+    </td>
+    <td>
+        LOF Method
+    </td>
+  </tr>
+</table>
+
+
+
+
+
+### Outlier Treatment
+
+Post identification, outliers are addressed by replacing them with NaN values, ensuring these anomalous values do not adversely impact further data analyses. 
+
+### Exporting the Processed Data
+
+Following outlier detection and treatment, the cleaned dataset has been saved and is ready for subsequent processing phases. For access to the processed dataset, refer to the file: `02_outliers_removed_chauvenets.pkl`.
+
+
+<table>
+  <tr>
+    <td>
+        <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/979b9c94-bab5-4571-965a-774a640e0153" alt="Mark_outliers" height="300"/>
+    </td>
+    <td>
+        <img src="https://github.com/EfthimiosVlahos/SmartLift-Analysis-Project/assets/56899588/ee3b4efe-5d85-4cfc-b59b-0e521eda5bf9" alt="NAN" height="300"/>
+    </td>
+  </tr>
+  <tr>
+    <td>
+       Marking Outliers
+    </td>
+    <td>
+        Replacing Outliers with NAN
+    </td>
+  </tr>
+</table>
+
+
+
+---
+
 
 # Feature Engineering <a id="part-4"></a>
 
